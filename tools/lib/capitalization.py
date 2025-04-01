@@ -184,6 +184,8 @@ IGNORED_PHRASES = [
     r"comma-separated list",
     r"combined feed",
     r"unknown operator",
+    r"channel {channel} > <z-topic-name></z-topic-name>",
+    r"channel {channel} > {topic_display_name}",
 ]
 
 # Sort regexes in descending order of their lengths. As a result, the

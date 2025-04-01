@@ -720,14 +720,29 @@ export class Filter {
                 const channel = stream_data.get_sub_by_id_string(terms[0].operand)?.name;
                 if (channel) {
                     const topic = terms[1].operand;
-                    parts.push(
-                        render_search_description({
-                            type: "channel_topic",
-                            channel,
-                            topic_display_name: util.get_final_topic_display_name(topic),
-                            is_empty_string_topic: topic === "",
-                        }),
-                    );
+                    const topic_display_name = util.get_final_topic_display_name(topic);
+                    if (!topic) {
+                        parts.push(
+                            $t(
+                                {
+                                    defaultMessage:
+                                        "channel {channel} > <z-topic-name></z-topic-name>",
+                                },
+                                {
+                                    channel,
+                                    "z-topic-name": () =>
+                                        `<span class="empty-topic-display">${topic_display_name}</span>`,
+                                },
+                            ),
+                        );
+                    } else {
+                        parts.push(
+                            $t(
+                                {defaultMessage: "channel {channel} > {topic_display_name}"},
+                                {channel, topic_display_name},
+                            ),
+                        );
+                    }
                     terms = terms.slice(2);
                 }
             }

@@ -1630,7 +1630,7 @@ test("describe", ({mock_template, override}) => {
         {operator: "channel", operand: devel_id.toString()},
         {operator: "topic", operand: "JS"},
     ];
-    string = "channel devel > JS";
+    string = "translated: channel devel > JS";
     assert.equal(Filter.search_description_as_html(narrow, false), string);
 
     narrow = [
@@ -1742,7 +1742,8 @@ test("describe", ({mock_template, override}) => {
         {operator: "channel", operand: devel_id.toString()},
         {operator: "topic", operand: ""},
     ];
-    string = 'channel devel > <span class="empty-topic-display">translated: general chat</span>';
+    string =
+        'translated: channel devel > <span class="empty-topic-display">translated: general chat</span>';
     assert.equal(Filter.search_description_as_html(narrow, false), string);
 
     narrow = [
