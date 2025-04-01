@@ -759,19 +759,57 @@ export class Filter {
                 };
                 const negated_phrase = custom_negated_operand_phrases[operand];
                 if (term.negated && negated_phrase !== undefined) {
-                    return render_search_description({
-                        type: "is_operator",
-                        verb: "",
-                        operand: negated_phrase,
-                    });
+                    return $t({defaultMessage: "unresolved topics"});
                 }
 
-                const verb = term.negated ? "exclude " : "";
-                return render_search_description({
-                    type: "is_operator",
-                    verb,
-                    operand,
-                });
+                switch (operand) {
+                    case "mentioned":
+                    case "is:mentioned":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude @-mentions"})
+                            : $t({defaultMessage: "@-mentions"});
+                    case "starred":
+                    case "is:starred":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude starred messages"})
+                            : $t({defaultMessage: "starred messages"});
+                    case "alerted":
+                    case "is:alerted":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude alerted messages"})
+                            : $t({defaultMessage: "alerted messages"});
+                    case "unread":
+                    case "is:unread":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude unread messages"})
+                            : $t({defaultMessage: "unread messages"});
+                    case "dm":
+                    case "private":
+                    case "is:dm":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude direct messages"})
+                            : $t({defaultMessage: "direct messages"});
+                    case "resolved":
+                    case "is:resolved":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude resolved topics"})
+                            : $t({defaultMessage: "resolved topics"});
+                    case "followed":
+                    case "is:followed":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude followed topics"})
+                            : $t({defaultMessage: "followed topics"});
+                    case "muted":
+                    case "is:muted":
+                        return term.negated
+                            ? $t({defaultMessage: "exclude muted messages"})
+                            : $t({defaultMessage: "muted messages"});
+                    default:
+                        return $t(
+                            {defaultMessage: "invalid {operand} operand for is operator"},
+                            {operand},
+                        );
+                }
             }
             if (canonicalized_operator === "has") {
                 // search_suggestion.get_suggestions takes care that this message will

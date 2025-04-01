@@ -186,6 +186,17 @@ IGNORED_PHRASES = [
     r"unknown operator",
     r"channel {channel} > <z-topic-name></z-topic-name>",
     r"channel {channel} > {topic_display_name}",
+    r"unresolved topics",
+    r"resolved topics",
+    r"(exclude )?@-mentions",
+    r"(exclude )?starred messages",
+    r"(exclude )?alerted messages",
+    r"(exclude )?unread messages",
+    r"(exclude )?direct messages",
+    r"(exclude )?resolved topics",
+    r"(exclude )?followed topics",
+    r"(exclude )?muted messages",
+    r"invalid {operand} operand for is operator",
 ]
 
 # Sort regexes in descending order of their lengths. As a result, the

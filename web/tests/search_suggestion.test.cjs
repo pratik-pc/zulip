@@ -395,13 +395,13 @@ test("empty_query_suggestions", () => {
     function describe(q) {
         return suggestions.lookup_table.get(q).description_html;
     }
-    assert.equal(describe("is:dm"), "Direct messages");
-    assert.equal(describe("is:starred"), "Starred messages");
-    assert.equal(describe("is:mentioned"), "@-mentions");
-    assert.equal(describe("is:alerted"), "Alerted messages");
-    assert.equal(describe("is:unread"), "Unread messages");
-    assert.equal(describe("is:resolved"), "Resolved topics");
-    assert.equal(describe("is:followed"), "Followed topics");
+    assert.equal(describe("is:dm"), "Translated: direct messages");
+    assert.equal(describe("is:starred"), "Translated: starred messages");
+    assert.equal(describe("is:mentioned"), "Translated: @-mentions");
+    assert.equal(describe("is:alerted"), "Translated: alerted messages");
+    assert.equal(describe("is:unread"), "Translated: unread messages");
+    assert.equal(describe("is:resolved"), "Translated: resolved topics");
+    assert.equal(describe("is:followed"), "Translated: followed topics");
     assert.equal(describe("sender:myself@zulip.com"), "Sent by me");
     assert.equal(describe("has:link"), "Messages with links");
     assert.equal(describe("has:image"), "Messages with images");
@@ -496,14 +496,14 @@ test("check_is_suggestions", ({override, mock_template}) => {
         return suggestions.lookup_table.get(q).description_html;
     }
 
-    assert.equal(describe("is:dm"), "Direct messages");
-    assert.equal(describe("is:starred"), "Starred messages");
-    assert.equal(describe("is:mentioned"), "@-mentions");
-    assert.equal(describe("is:alerted"), "Alerted messages");
-    assert.equal(describe("is:unread"), "Unread messages");
-    assert.equal(describe("is:resolved"), "Resolved topics");
-    assert.equal(describe("is:followed"), "Followed topics");
-    assert.equal(describe("is:muted"), "Muted messages");
+    assert.equal(describe("is:dm"), "Translated: direct messages");
+    assert.equal(describe("is:starred"), "Translated: starred messages");
+    assert.equal(describe("is:mentioned"), "Translated: @-mentions");
+    assert.equal(describe("is:alerted"), "Translated: alerted messages");
+    assert.equal(describe("is:unread"), "Translated: unread messages");
+    assert.equal(describe("is:resolved"), "Translated: resolved topics");
+    assert.equal(describe("is:followed"), "Translated: followed topics");
+    assert.equal(describe("is:muted"), "Translated: muted messages");
 
     query = "-i";
     suggestions = get_suggestions(query);
@@ -520,14 +520,14 @@ test("check_is_suggestions", ({override, mock_template}) => {
     ];
     assert.deepEqual(suggestions.strings, expected);
 
-    assert.equal(describe("-is:dm"), "Exclude direct messages");
-    assert.equal(describe("-is:starred"), "Exclude starred messages");
-    assert.equal(describe("-is:mentioned"), "Exclude @-mentions");
-    assert.equal(describe("-is:alerted"), "Exclude alerted messages");
-    assert.equal(describe("-is:unread"), "Exclude unread messages");
+    assert.equal(describe("-is:dm"), "Exclude translated: direct messages");
+    assert.equal(describe("-is:starred"), "Exclude translated: starred messages");
+    assert.equal(describe("-is:mentioned"), "Exclude translated: @-mentions");
+    assert.equal(describe("-is:alerted"), "Exclude translated: alerted messages");
+    assert.equal(describe("-is:unread"), "Exclude translated: unread messages");
     assert.equal(describe("-is:resolved"), "Unresolved topics");
-    assert.equal(describe("-is:followed"), "Exclude followed topics");
-    assert.equal(describe("-is:muted"), "Exclude muted messages");
+    assert.equal(describe("-is:followed"), "Exclude translated: followed topics");
+    assert.equal(describe("-is:muted"), "Exclude translated: muted messages");
 
     // operand suggestions follow.
 

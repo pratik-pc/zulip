@@ -7,6 +7,7 @@ import {MAX_ITEMS} from "./bootstrap_typeahead.ts";
 import * as common from "./common.ts";
 import * as direct_message_group_data from "./direct_message_group_data.ts";
 import {Filter, create_user_pill_context} from "./filter.ts";
+import {$t} from "./i18n.ts";
 import * as narrow_state from "./narrow_state.ts";
 import {page_params} from "./page_params.ts";
 import * as people from "./people.ts";
@@ -675,7 +676,7 @@ function get_is_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugge
         suggestions = [
             {
                 search_string: "is:resolved",
-                description_html: "resolved topics",
+                description_html: $t({defaultMessage: "resolved topics"}),
                 is_people: false,
                 incompatible_patterns: [
                     {operator: "is", operand: "resolved"},
@@ -686,7 +687,7 @@ function get_is_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugge
             },
             {
                 search_string: "-is:resolved",
-                description_html: "unresolved topics",
+                description_html: $t({defaultMessage: "unresolved topics"}),
                 is_people: false,
                 incompatible_patterns: [
                     {operator: "is", operand: "resolved"},
@@ -700,7 +701,7 @@ function get_is_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugge
         suggestions = [
             {
                 search_string: "is:dm",
-                description_html: "direct messages",
+                description_html: $t({defaultMessage: "direct messages"}),
                 is_people: false,
                 incompatible_patterns: [
                     {operator: "is", operand: "dm"},
@@ -713,19 +714,19 @@ function get_is_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugge
             },
             {
                 search_string: "is:starred",
-                description_html: "starred messages",
+                description_html: $t({defaultMessage: "starred messages"}),
                 is_people: false,
                 incompatible_patterns: [{operator: "is", operand: "starred"}],
             },
             {
                 search_string: "is:mentioned",
-                description_html: "@-mentions",
+                description_html: $t({defaultMessage: "@-mentions"}),
                 is_people: false,
                 incompatible_patterns: [{operator: "is", operand: "mentioned"}],
             },
             {
                 search_string: "is:followed",
-                description_html: "followed topics",
+                description_html: $t({defaultMessage: "followed topics"}),
                 is_people: false,
                 incompatible_patterns: [
                     {operator: "is", operand: "followed"},
@@ -736,19 +737,19 @@ function get_is_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugge
             },
             {
                 search_string: "is:alerted",
-                description_html: "alerted messages",
+                description_html: $t({defaultMessage: "alerted messages"}),
                 is_people: false,
                 incompatible_patterns: [{operator: "is", operand: "alerted"}],
             },
             {
                 search_string: "is:unread",
-                description_html: "unread messages",
+                description_html: $t({defaultMessage: "unread messages"}),
                 is_people: false,
                 incompatible_patterns: [{operator: "is", operand: "unread"}],
             },
             {
                 search_string: "is:muted",
-                description_html: "muted messages",
+                description_html: $t({defaultMessage: "muted messages"}),
                 is_people: false,
                 incompatible_patterns: [
                     {operator: "is", operand: "muted"},
@@ -757,7 +758,7 @@ function get_is_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugge
             },
             {
                 search_string: "is:resolved",
-                description_html: "resolved topics",
+                description_html: $t({defaultMessage: "resolved topics"}),
                 is_people: false,
                 incompatible_patterns: [
                     {operator: "is", operand: "resolved"},
@@ -768,7 +769,7 @@ function get_is_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugge
             },
             {
                 search_string: "-is:resolved",
-                description_html: "unresolved topics",
+                description_html: $t({defaultMessage: "unresolved topics"}),
                 is_people: false,
                 incompatible_patterns: [
                     {operator: "is", operand: "resolved"},

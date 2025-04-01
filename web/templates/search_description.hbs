@@ -19,39 +19,5 @@
         {{/if}}
     {{~/each~}}
     {{~!-- squash whitespace --~}}
-{{else if (eq type "is_operator")}}
-    {{#if (eq operand "mentioned")}}
-        {{~!-- squash whitespace --~}}
-        {{verb}}@-mentions
-        {{~!-- squash whitespace --~}}
-    {{else if (or (eq operand "starred") (eq operand "alerted") (eq operand "unread"))}}
-        {{~!-- squash whitespace --~}}
-        {{verb}}{{operand}} messages
-        {{~!-- squash whitespace --~}}
-    {{else if (or (eq operand "dm") (eq operand "private"))}}
-        {{~!-- squash whitespace --~}}
-        {{verb}}direct messages
-        {{~!-- squash whitespace --~}}
-    {{else if (eq operand "resolved")}}
-        {{~!-- squash whitespace --~}}
-        {{verb}}resolved topics
-        {{~!-- squash whitespace --~}}
-    {{else if (eq operand "followed")}}
-        {{~!-- squash whitespace --~}}
-        {{verb}}followed topics
-        {{~!-- squash whitespace --~}}
-    {{else if (eq operand "muted")}}
-        {{~!-- squash whitespace --~}}
-        {{verb}}muted messages
-        {{~!-- squash whitespace --~}}
-    {{else if (eq operand "unresolved")}}
-        {{~!-- squash whitespace --~}}
-        {{verb}}unresolved topics
-        {{~!-- squash whitespace --~}}
-    {{else}}
-        {{~!-- squash whitespace --~}}
-        invalid {{operand}} operand for is operator
-        {{~!-- squash whitespace --~}}
-    {{~/if~}}
 {{~/if~}}
 
