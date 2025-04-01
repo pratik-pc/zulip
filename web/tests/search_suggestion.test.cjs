@@ -127,9 +127,7 @@ test("get_is_suggestions_for_spectator", () => {
     page_params.is_spectator = false;
 });
 
-test("subset_suggestions", ({mock_template}) => {
-    mock_template("search_description.hbs", true, (_data, html) => html);
-
+test("subset_suggestions", () => {
     const denmark_id = new_stream_id();
     const sub = {name: "Denmark", stream_id: denmark_id};
     stream_data.add_sub(sub);
@@ -408,9 +406,7 @@ test("empty_query_suggestions", () => {
     assert.equal(describe("has:attachment"), "Messages with attachments");
 });
 
-test("has_suggestions", ({override, mock_template}) => {
-    mock_template("search_description.hbs", true, (_data, html) => html);
-
+test("has_suggestions", ({override}) => {
     // Checks that category wise suggestions are displayed instead of a single
     // default suggestion when suggesting `has` operator.
     let query = "h";
@@ -468,7 +464,6 @@ test("has_suggestions", ({override, mock_template}) => {
 });
 
 test("check_is_suggestions", ({override, mock_template}) => {
-    mock_template("search_description.hbs", true, (_data, html) => html);
     mock_template("user_pill.hbs", true, (_data, html) => html);
 
     override(narrow_state, "stream_id", noop);
@@ -641,7 +636,6 @@ test("sent_by_me_suggestions", ({override, mock_template}) => {
 });
 
 test("topic_suggestions", ({override, mock_template}) => {
-    mock_template("search_description.hbs", true, (_data, html) => html);
     mock_template("user_pill.hbs", true, (_data, html) => html);
     let suggestions;
     let expected;
@@ -782,8 +776,7 @@ test("topic_suggestions (limits)", () => {
     assert_result("z", []);
 });
 
-test("whitespace_glitch", ({override, mock_template}) => {
-    mock_template("search_description.hbs", true, (_data, html) => html);
+test("whitespace_glitch", ({override}) => {
     const office_stream_id = new_stream_id();
 
     const query = "channel:office "; // note trailing space
@@ -920,9 +913,9 @@ test("people_suggestions", ({override, mock_template}) => {
             suggestions.lookup_table.get(q).description_html.startsWith(description_html_start),
         );
     }
-    test_describe("dm:ted@zulip.com", "Direct messages with");
-    test_describe("sender:ted@zulip.com", "Sent by");
-    test_describe("dm-including:ted@zulip.com", "Direct messages including");
+    test_describe("dm:ted@zulip.com", "Translated: direct messages with");
+    test_describe("sender:ted@zulip.com", "Translated: sent by");
+    test_describe("dm-including:ted@zulip.com", "Translated: direct messages including");
 
     let expectedString = "<strong>Te</strong>d Smith";
 

@@ -277,7 +277,7 @@ function get_group_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Suggestio
     // Take top 15 persons, since they're ordered by pm_recipient_count.
     persons = persons.slice(0, 15);
 
-    const prefix = Filter.operator_to_prefix("dm", negated);
+    const prefix = Filter.operator_to_prefix("dm", operand, negated);
 
     const person_highlighter = make_person_highlighter(last_part);
 
@@ -382,7 +382,7 @@ function get_person_suggestions(
 
     const persons = people_getter();
 
-    const prefix = Filter.operator_to_prefix(autocomplete_operator, last.negated);
+    const prefix = Filter.operator_to_prefix(autocomplete_operator, last.operand, last.negated);
 
     const person_highlighter = make_person_highlighter(query);
 
