@@ -733,12 +733,17 @@ export class Filter {
     }
 
     // Convert a list of terms to a human-readable description.
-    static parts_for_describe(terms: NarrowTerm[], is_operator_suggestion: boolean): Part[] {
+    static search_description_as_html(
+        terms: NarrowTerm[],
+        is_operator_suggestion: boolean,
+    ): string {
         const parts: Part[] = [];
 
         if (terms.length === 0) {
             parts.push({type: "plain_text", content: "combined feed"});
-            return parts;
+            return render_search_description({
+                parts,
+            });
         }
 
         if (terms[0] !== undefined && terms[1] !== undefined) {
@@ -863,15 +868,8 @@ export class Filter {
                 content: "unknown operator",
             };
         });
-        return [...parts, ...more_parts];
-    }
-
-    static search_description_as_html(
-        terms: NarrowTerm[],
-        is_operator_suggestion: boolean,
-    ): string {
         return render_search_description({
-            parts: Filter.parts_for_describe(terms, is_operator_suggestion),
+            parts: [...parts, ...more_parts],
         });
     }
 
