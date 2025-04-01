@@ -215,6 +215,10 @@ IGNORED_PHRASES = [
     r"(exclude )?messages in {operand}",
     r"(exclude )?messages that are {operand}",
     r"invalid {operand} operand for has operator",
+    r"(exclude )?channel {highlighted_channel}",
+    r"All public channels( that you can view)?",
+    r"(exclude )?sent by me",
+    r"search for {search_term}",
 ]
 
 # Sort regexes in descending order of their lengths. As a result, the

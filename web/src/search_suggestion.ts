@@ -169,10 +169,10 @@ function get_channel_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Suggest
     const highlight_query = typeahead_helper.highlight_with_escaping_and_regex;
 
     return channels.map((channel_name) => {
-        const prefix = "channel";
         const highlighted_channel = highlight_query(regex, channel_name);
-        const verb = last.negated ? "exclude " : "";
-        const description_html = verb + prefix + " " + highlighted_channel;
+        const description_html = last.negated
+            ? $t({defaultMessage: "exclude channel {highlighted_channel}"}, {highlighted_channel})
+            : $t({defaultMessage: "channel {highlighted_channel}"}, {highlighted_channel});
         const channel = stream_data.get_sub_by_name(channel_name);
         assert(channel !== undefined);
         const term = {
@@ -598,15 +598,24 @@ function get_special_filter_suggestions(
                     return {
                         ...suggestion,
                         search_string: "-" + suggestion.search_string,
-                        description_html: "unresolved topics",
+                        description_html: $t({defaultMessage: "unresolved topics"}),
                     };
                 } else if (suggestion.search_string === "-is:resolved") {
                     return null;
                 }
+                const [operator, operand] = suggestion.search_string.split(":");
+                const term = [
+                    {
+                        operator: operator!,
+                        operand: operand!,
+                        negated: true,
+                    },
+                ];
+                const description_html = Filter.search_description_as_html(term, false);
                 return {
                     ...suggestion,
                     search_string: "-" + suggestion.search_string,
-                    description_html: "exclude " + suggestion.description_html,
+                    description_html,
                 };
             })
             .filter(
@@ -649,9 +658,9 @@ function get_channels_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]):
     }
     let description_html;
     if (page_params.is_spectator || current_user.is_guest) {
-        description_html = "All public channels that you can view";
+        description_html = $t({defaultMessage: "All public channels that you can view"});
     } else {
-        description_html = "All public channels";
+        description_html = $t({defaultMessage: "All public channels"});
     }
     const suggestions: SuggestionAndIncompatiblePatterns[] = [
         {
@@ -801,25 +810,25 @@ function get_has_filter_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugg
     const suggestions: SuggestionAndIncompatiblePatterns[] = [
         {
             search_string: "has:link",
-            description_html: "messages with links",
+            description_html: $t({defaultMessage: "messages with links"}),
             is_people: false,
             incompatible_patterns: [{operator: "has", operand: "link"}],
         },
         {
             search_string: "has:image",
-            description_html: "messages with images",
+            description_html: $t({defaultMessage: "messages with images"}),
             is_people: false,
             incompatible_patterns: [{operator: "has", operand: "image"}],
         },
         {
             search_string: "has:attachment",
-            description_html: "messages with attachments",
+            description_html: $t({defaultMessage: "messages with attachments"}),
             is_people: false,
             incompatible_patterns: [{operator: "has", operand: "attachment"}],
         },
         {
             search_string: "has:reaction",
-            description_html: "messages with reactions",
+            description_html: $t({defaultMessage: "messages with reactions"}),
             is_people: false,
             incompatible_patterns: [{operator: "has", operand: "reaction"}],
         },
@@ -832,13 +841,14 @@ function get_sent_by_me_suggestions(last: NarrowTerm, terms: NarrowTerm[]): Sugg
     const negated =
         last.negated === true || (last.operator === "search" && last.operand.startsWith("-"));
     const negated_symbol = negated ? "-" : "";
-    const verb = negated ? "exclude " : "";
 
     const sender_query = negated_symbol + "sender:" + people.my_current_email();
     const sender_me_query = negated_symbol + "sender:me";
     const from_string = negated_symbol + "from";
     const sent_string = negated_symbol + "sent";
-    const description_html = verb + "sent by me";
+    const description_html = negated
+        ? $t({defaultMessage: "exclude sent by me"})
+        : $t({defaultMessage: "sent by me"});
 
     const incompatible_patterns = [{operator: "sender"}, {operator: "from"}];
 
@@ -1096,12 +1106,11 @@ export function get_search_result(
 
     // Display the default first, unless it has invalid terms.
     if (last.operator === "search") {
+        const search_term = `<strong>${Handlebars.Utils.escapeExpression(last.operand)}</strong>`;
         suggestion_line = [
             {
                 search_string: last.operand,
-                description_html: `search for <strong>${Handlebars.Utils.escapeExpression(
-                    last.operand,
-                )}</strong>`,
+                description_html: $t({defaultMessage: "search for {search_term}"}, {search_term}),
                 is_people: false,
             },
         ];
