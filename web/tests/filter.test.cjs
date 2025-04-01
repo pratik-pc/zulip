@@ -1679,7 +1679,7 @@ test("describe", ({mock_template, override}) => {
 
     // this should be unreachable, but just in case
     narrow = [{operator: "bogus", operand: "foo"}];
-    string = "unknown operator";
+    string = "translated: unknown operator";
     assert.equal(Filter.search_description_as_html(narrow, false), string);
 
     narrow = [
@@ -1725,7 +1725,7 @@ test("describe", ({mock_template, override}) => {
     assert.equal(Filter.search_description_as_html(narrow, false), string);
 
     narrow = [];
-    string = "combined feed";
+    string = "translated: combined feed";
     assert.equal(Filter.search_description_as_html(narrow, false), string);
 
     // canonical version of the operator is used in description

@@ -34,38 +34,6 @@ type IconData = {
       }
 );
 
-type Part =
-    | {
-          type: "plain_text";
-          content: string;
-      }
-    | {
-          type: "channel_topic";
-          channel: string;
-          topic_display_name: string;
-          is_empty_string_topic: boolean;
-      }
-    | {
-          type: "is_operator";
-          verb: string;
-          operand: string;
-      }
-    | {
-          type: "invalid_has";
-          operand: string;
-      }
-    | {
-          type: "prefix_for_operator";
-          prefix_for_operator: string;
-          operand: string;
-          is_empty_string_topic?: boolean;
-      }
-    | {
-          type: "user_pill";
-          operator: string;
-          users: ValidOrInvalidUser[];
-      };
-
 type ValidOrInvalidUser =
     | {valid_user: true; user_pill_context: UserPillItem}
     | {valid_user: false; operand: string};
@@ -737,13 +705,10 @@ export class Filter {
         terms: NarrowTerm[],
         is_operator_suggestion: boolean,
     ): string {
-        const parts: Part[] = [];
+        const parts: string[] = [];
 
         if (terms.length === 0) {
-            parts.push({type: "plain_text", content: "combined feed"});
-            return render_search_description({
-                parts,
-            });
+            return $t({defaultMessage: "combined feed"});
         }
 
         if (terms[0] !== undefined && terms[1] !== undefined) {
@@ -755,18 +720,20 @@ export class Filter {
                 const channel = stream_data.get_sub_by_id_string(terms[0].operand)?.name;
                 if (channel) {
                     const topic = terms[1].operand;
-                    parts.push({
-                        type: "channel_topic",
-                        channel,
-                        topic_display_name: util.get_final_topic_display_name(topic),
-                        is_empty_string_topic: topic === "",
-                    });
+                    parts.push(
+                        render_search_description({
+                            type: "channel_topic",
+                            channel,
+                            topic_display_name: util.get_final_topic_display_name(topic),
+                            is_empty_string_topic: topic === "",
+                        }),
+                    );
                     terms = terms.slice(2);
                 }
             }
         }
 
-        const more_parts = terms.map((term): Part => {
+        const more_parts = terms.map((term): string => {
             const operand = term.operand;
             const canonicalized_operator = Filter.canonicalize_operator(term.operator);
             if (canonicalized_operator === "is") {
@@ -777,19 +744,19 @@ export class Filter {
                 };
                 const negated_phrase = custom_negated_operand_phrases[operand];
                 if (term.negated && negated_phrase !== undefined) {
-                    return {
+                    return render_search_description({
                         type: "is_operator",
                         verb: "",
                         operand: negated_phrase,
-                    };
+                    });
                 }
 
                 const verb = term.negated ? "exclude " : "";
-                return {
+                return render_search_description({
                     type: "is_operator",
                     verb,
                     operand,
-                };
+                });
             }
             if (canonicalized_operator === "has") {
                 // search_suggestion.get_suggestions takes care that this message will
@@ -805,10 +772,10 @@ export class Filter {
                     "reactions",
                 ];
                 if (!valid_has_operands.includes(operand)) {
-                    return {
+                    return render_search_description({
                         type: "invalid_has",
                         operand,
-                    };
+                    });
                 }
             }
             const prefix_for_operator = Filter.operator_to_prefix(
@@ -830,47 +797,42 @@ export class Filter {
                         user_pill_context: create_user_pill_context(person),
                     };
                 });
-                return {
+                return render_search_description({
                     type: "user_pill",
                     operator: prefix_for_operator,
                     users,
-                };
+                });
             }
             if (prefix_for_operator !== "") {
                 if (canonicalized_operator === "channel") {
                     const stream = stream_data.get_sub_by_id_string(operand);
                     if (stream) {
-                        return {
+                        return render_search_description({
                             type: "prefix_for_operator",
                             prefix_for_operator,
                             operand: stream.name,
-                        };
+                        });
                     }
                     // Assume the operand is a partially formed name and return
                     // the operator as the channel name in the next block.
                 }
                 if (canonicalized_operator === "topic" && !is_operator_suggestion) {
-                    return {
+                    return render_search_description({
                         type: "prefix_for_operator",
                         prefix_for_operator,
                         operand: util.get_final_topic_display_name(operand),
                         is_empty_string_topic: operand === "",
-                    };
+                    });
                 }
-                return {
+                return render_search_description({
                     type: "prefix_for_operator",
                     prefix_for_operator,
                     operand,
-                };
+                });
             }
-            return {
-                type: "plain_text",
-                content: "unknown operator",
-            };
+            return $t({defaultMessage: "unknown operator"});
         });
-        return render_search_description({
-            parts: [...parts, ...more_parts],
-        });
+        return [...parts, ...more_parts].join(", ");
     }
 
     static is_spectator_compatible(terms: NarrowTerm[]): boolean {
