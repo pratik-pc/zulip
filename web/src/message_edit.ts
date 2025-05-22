@@ -1325,34 +1325,35 @@ export async function save_message_row_edit($row: JQuery): Promise<void> {
             }
         },
         error(xhr) {
-            if (msg_list === message_lists.current) {
+            if (edit_locally_echoed) {
                 message_id = rows.id($row);
+                let echoed_message = message_store.get(message_id);
+                assert(echoed_message !== undefined);
+                const echo_data = currently_echoing_messages.get(message_id);
+                assert(echo_data !== undefined);
 
-                if (edit_locally_echoed) {
-                    let echoed_message = message_store.get(message_id);
-                    assert(echoed_message !== undefined);
-                    const echo_data = currently_echoing_messages.get(message_id);
-                    assert(echo_data !== undefined);
+                delete echoed_message.local_edit_timestamp;
+                currently_echoing_messages.delete(message_id);
 
-                    delete echoed_message.local_edit_timestamp;
-                    currently_echoing_messages.delete(message_id);
+                // Restore the original content.
+                echoed_message = echo.edit_locally(echoed_message, {
+                    content: echo_data.orig_content,
+                    raw_content: echo_data.orig_raw_content,
+                    mentioned: echo_data.mentioned,
+                    mentioned_me_directly: echo_data.mentioned_me_directly,
+                    alerted: echo_data.alerted,
+                });
 
-                    // Restore the original content.
-                    echoed_message = echo.edit_locally(echoed_message, {
-                        content: echo_data.orig_content,
-                        raw_content: echo_data.orig_raw_content,
-                        mentioned: echo_data.mentioned,
-                        mentioned_me_directly: echo_data.mentioned_me_directly,
-                        alerted: echo_data.alerted,
-                    });
-
+                if (msg_list === message_lists.current) {
                     $row = message_lists.current.get_row(message_id);
                     if (!currently_editing_messages.has(message_id)) {
                         // Return to the message editing open UI state with the edited content.
                         start_edit_maintaining_scroll($row, echo_data.raw_content);
                     }
                 }
+            }
 
+            if (msg_list === message_lists.current) {
                 hide_message_edit_spinner($row);
                 if (xhr.readyState !== 0) {
                     const $container = compose_banner.get_compose_banner_container(
