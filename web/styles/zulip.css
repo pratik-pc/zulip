@@ -244,6 +244,11 @@ a.search-shared-history:hover {
     text-decoration: none;
 }
 
+.empty_feed_notice a.search-shared-history {
+    margin-top: 10px;
+    display: inline-block;
+}
+
 .messages-logo-svg {
     width: 1.7188em; /* 27.5px at 16px/1em */
 }
