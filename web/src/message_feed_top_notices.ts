@@ -21,11 +21,11 @@ function hide_history_limit_notice(): void {
 }
 
 function hide_end_of_results_notice(): void {
-    $(".all-messages-search-caution").hide();
+    $(".all-messages-search-caution").addClass("hidden");
 }
 
 function show_end_of_results_notice(): void {
-    $(".all-messages-search-caution").show();
+    $(".all-messages-search-caution").removeClass("hidden");
 
     // Set the link to point to this search with streams:public added.
     // Note that element we adjust is not visible to spectators.
