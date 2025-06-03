@@ -57,6 +57,7 @@ export function update_top_of_narrow_notices(msg_list: MessageList): void {
             !filter.contains_only_private_messages() &&
             !filter.includes_full_stream_history() &&
             !filter.is_personal_filter() &&
+            !msg_list.empty() &&
             !(
                 _.isEqual(filter._sorted_term_types, ["sender", "has-reaction"]) &&
                 filter.operands("sender")[0] === people.my_current_email()
