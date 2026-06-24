@@ -14,6 +14,9 @@ export function enable_scrolling(): void {
     $(":root").css({"overflow-y": "scroll", "--disabled-scrollbar-width": "0px"});
 }
 
+export const OVERLAY_CONTROL_SELECTOR =
+    "input, button, select, .input, .sidebar-item, .ind-tab.first, a[href], a[tabindex='0'], .overlay-message-info-box";
+
 export function get_visible_focusable_elements_in_overlay_container(
     $container: JQuery,
 ): HTMLElement[] {
