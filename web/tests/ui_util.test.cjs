@@ -6,6 +6,7 @@ const {zrequire} = require("./lib/namespace.cjs");
 const {run_test} = require("./lib/test.cjs");
 const {$} = require("./lib/zjquery.cjs");
 
+const blueslip = zrequire("blueslip");
 const ui_util = zrequire("ui_util");
 
 run_test("potentially_collapse_quotes", ({override_rewire}) => {
@@ -118,4 +119,17 @@ run_test("replace_emoji_name_with_emoji_unicode", () => {
     $emoji.attr("class", "emoji emoji-1f468-200d-1f373");
     const man_cook_emoji = "👨‍🍳";
     assert.equal(man_cook_emoji, ui_util.convert_emoji_element_to_unicode($emoji));
+});
+
+run_test("replace_emoji_name_with_emoji_unicode: invalid codepoint", () => {
+    // A codepoint above the Unicode maximum still looks like an emoji
+    // class, so it reaches the conversion. We fall back to the element's
+    // text for the whole emoji rather than substituting it for just the
+    // invalid part of the sequence.
+    const $emoji = $.create("invalid-emoji").attr("class", "emoji emoji-1f468-ffffffff");
+    $emoji.set_matches("img", false);
+    $emoji.text(":man_cook:");
+
+    blueslip.expect("error", "Invalid unicode codepoint for emoji");
+    assert.equal(ui_util.convert_emoji_element_to_unicode($emoji), ":man_cook:");
 });
