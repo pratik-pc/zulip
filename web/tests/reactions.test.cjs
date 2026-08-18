@@ -12,9 +12,11 @@ const {$} = require("./lib/zjquery.cjs");
 const {page_params} = require("./lib/zpage_params.cjs");
 
 const alice_user_id = 5;
+const bob_user_id = 6;
 
 const sample_message = {
     id: 1001,
+    sender_id: bob_user_id,
     reactions: [
         {emoji_name: "smile", user_id: 5, reaction_type: "unicode_emoji", emoji_code: "1f604"},
         {emoji_name: "smile", user_id: 6, reaction_type: "unicode_emoji", emoji_code: "1f604"},
@@ -99,7 +101,7 @@ const alice = make_user({
 });
 const bob = make_user({
     email: "bob@example.com",
-    user_id: 6,
+    user_id: bob_user_id,
     full_name: "Bob van Roberts",
 });
 const cali = make_user({
@@ -529,6 +531,7 @@ test("sending failure reverts optimistic update", ({override_rewire}) => {
         assert.equal(remove_stub.num_calls, 1);
         assert.deepEqual(remove_stub.get_args("event").event, {
             message_id: message.id,
+            message_sender_id: bob_user_id,
             user_id: alice_user_id,
             reaction_type: "unicode_emoji",
             emoji_name: "banana",
@@ -551,6 +554,7 @@ test("sending failure reverts optimistic update", ({override_rewire}) => {
         assert.equal(add_stub.num_calls, 2);
         assert.deepEqual(add_stub.get_args("event").event, {
             message_id: message.id,
+            message_sender_id: bob_user_id,
             user_id: alice_user_id,
             reaction_type: "unicode_emoji",
             emoji_name: "smile",
